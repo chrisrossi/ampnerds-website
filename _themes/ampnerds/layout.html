@@ -1,0 +1,58 @@
+{#
+    agogo/layout.html
+    ~~~~~~~~~~~~~~~~~
+
+    Sphinx layout template for the agogo theme, originally written
+    by Andi Albrecht.
+
+    :copyright: Copyright 2007-2011 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+#}
+{% extends "basic/layout.html" %}
+
+{% block header %}
+    <div class="header-wrapper">
+      <div class="header">
+        {%- if logo %}
+          <p class="logo"><a href="{{ pathto(master_doc) }}">
+            <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/>
+          </a></p>
+        {%- endif %}
+        {%- block headertitle %}
+        <div class="headertitle"><a
+          href="{{ pathto(master_doc) }}">Amp Nerds</a></div>
+        {%- endblock %}
+      </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+          {%- block document %}
+            {{ super() }}
+          {%- endblock %}
+        </div>
+        <div class="sidebar">
+          {%- block sidebartoc %}
+          <h3>{{ _('Table Of Contents') }}</h3>
+          {{ toctree() }}
+          {%- endblock %}
+       </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <div class="footer-wrapper">
+      <div class="footer">
+         {{ super() }}
+        <div class="clearer"></div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block relbar1 %}{% endblock %}
+{% block relbar2 %}{% endblock %}
