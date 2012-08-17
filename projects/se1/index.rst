@@ -16,6 +16,19 @@ possible to  perform modifications and listen to the results, gaining some real
 world  experience as to the aesthetic tonal impact of electronic design 
 decisions.
 
+Implementations
+~~~~~~~~~~~~~~~
+
+.. toctree::
+   :titlesonly:
+   
+   nvo/index
+   gcox/index
+   rossi/index
+
+Design Considerations
+~~~~~~~~~~~~~~~~~~~~~
+
 The amps consulted for this design are: Gibson GA-5, Fender 5F2 Tweed Princeton,
 Fender Vibrochamp and the Dearmond R5T (aka Martin 112T).  The Dearmond amp 
 served as the primary basis for this particular design.
