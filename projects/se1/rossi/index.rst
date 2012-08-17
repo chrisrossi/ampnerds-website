@@ -79,17 +79,18 @@ Dialing Things Back
 The next thing I did was add the sag resistor.  A 200 ohm resistor for R3 made
 a pretty big difference in overall feel of the amp.  While still capable of a
 decent amount of distortion, the distortion available sounded smoother to my 
-ears, where it had sounded harsher before.  I then tried the 125V primary on the
-power transformer, which knocked voltages down a little further.  This didn't 
-have near as dramatic an effect on the sound--I'm not sure I could really tell
-much difference at all, but it sounded pretty nice so I didn't change it back.
-Overall, voltage on the plate of the power tube went from about 350V or so to 
-closer to 275V.  To my ears, the lower voltage and increased sag make it work
-much better as an instrument amplifier.  I didn't experiment with changing the
-voltages on the power tube and preamp tubes independently of each other, to see
-if the tone change I liked was coming more from the preamp or more from the 
-power amp.  I just got to a state where I liked what I heard and stopped messing
-with it.
+ears, where it had sounded harsher before.  I also added negative feedback and
+found that the Vibrochamp parts worked pretty well to my ears.  I then tried
+the 125V primary on the power transformer, which knocked voltages down a little
+further.  This didn't have near as dramatic an effect on the sound--I'm not
+sure I could really tell much difference at all, but it sounded pretty nice so
+I didn't change it back.  Overall, voltage on the plate of the power tube went
+from about 350V or so to closer to 275V.  To my ears, the lower voltage and
+increased sag make it work much better as an instrument amplifier.  I didn't
+experiment with changing the voltages on the power tube and preamp tubes
+independently of each other, to see if the tone change I liked was coming more
+from the preamp or more from the power amp.  I just got to a state where I
+liked what I heard and stopped messing with it.
 
 Tone Control
 ~~~~~~~~~~~~
@@ -106,6 +107,16 @@ control, based on some breadboard experimentation I had done.  In the context of
 that amp, though, I found the tilt control to be kind of dead sounding overall.
 I promptly changed back to the stock tone control and haven't messed with it 
 since.
+
+6GM5 Tube
+~~~~~~~~~
+
+I'm really digging the 6GM5 tube.  It is a 9 pin version of a 7591A used in 
+several Ampegs in the 60s.  This tube isn't really designed for class A so 
+ostensibly I'm getting more distortion than if I was using a tube designed to
+be biased into class A.  But this is a guitar amp we're talking about, and we
+don't necessarily shy away from distortion.  I think it sounds great, albeit
+there isn't a ton of really clean headroom.
 
 Conclusions
 ~~~~~~~~~~~
