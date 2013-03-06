@@ -2,16 +2,18 @@
 Emergency Amp
 =============
 
+.. image:: photos/IMG_3743.JPG
+  
 Quick Hits
 ----------
 
 + Schematic (:download:`PDF file <emergency.pdf>`, 
   :download:`JSCHEM file <emergency.jsch>`)
++ `Sound Samples <https://soundcloud.com/chris-rossi-5/sets/emergency-amp-demonstration>`_.
++ :doc:`Photos <photos>`
 
-Beyond this point will be TL;DR for most people.  Fair warning.
-
-Background
-----------
+Background (tl;dr)
+------------------
 
 This amp started out with a piece old radio equipment I bought off of Ebay 
 because I liked the chassis.  The chassis came with a Dynamo label on it that 
@@ -41,7 +43,7 @@ from my stock of subminiature tubes.  The subminiature tubes were small enough
 that they could soldered directly into the circuit and mounted inside the 
 chassis.
 
-I ended up going with the same power transformer used for the SE-1 project.
+I ended up going with the same power transformer used for the :doc:`SE-1 project <../se1/index>`.
 For the output transformer, I wound up going with an `Edcor 10W 8K:8 push pull 
 output transformer <http://www.edcorusa.com/p/390/gxpp10-8-8k>`_.  It would work
 in terms of specs and physical size, was a very reasonably priced made in the USA
@@ -68,7 +70,7 @@ equipment you're likely to encounter--mostly PA gear in my experience.
 
 It strangely already had two indicator lamps on the front panel, both being run
 off the 6.3V heater tap.  Since I already had the holes, I left those there,
-but I did replace the matte plastic diffusors for some nice jewel diffusors.
+but I did replace the matte plastic diffusors with some nice jewel diffusors.
 The two input jacks went where the power and standby switches had been, without
 having to alter the holes.  The volume and tone knobs required some widening of
 existing holes on the front panel.  I drilled new holes in the back for a rear
@@ -138,20 +140,21 @@ Conclusions
 The Good
 ========
 
-It sounds pretty darn good.  Especially in the clean to slightly dirty range.
-Using the humdinger, I was able to dial heater hum down to almost nothing, and
-despite what should be a pretty bad wiring situation, the amp is fairly quiet 
-and doesn't have any major issues.  It also looks pretty darn cool in its shiny
-red and black powder coat finish.  And it's teeny size makes it really light
-and portable.
+It sounds pretty darn good at lower gain settings.  Nice round, warm tone.  It
+is possible to find usable overdriven tones.  Using the humdinger, I was able
+to dial heater hum down to almost nothing, and despite what should be a pretty
+bad wiring situation, the amp is fairly quiet and doesn't have any major
+issues.  It also looks pretty darn cool in its shiny red and black powder coat
+finish.  And it's teeny size makes it really light and portable.
 
 The Bad
 =======
 
-The overdriven sounds could be smoother.  It's fairly low output due to its 
-fairly low voltages.  It's fantastic for home and studio, and could be good in 
-quieter bands, but won't have enough power to be heard in even a moderately loud
-rock band.  The chassis originally had a handle for the top but I can't find it.
+It sounds raspier than I would like when overdriven.  It's fairly low output
+due to its fairly low voltages.  It's fantastic for home and studio, and could
+be good in quieter bands, but won't have enough power to be heard in even a
+moderately loud rock band.  The chassis originally had a handle for the top but
+I can't find it.
 
 The Ugly
 ========
