@@ -14,3 +14,4 @@ Projects:
    :maxdepth: 2
 
    projects/index
+   ingredients/index

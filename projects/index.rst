@@ -7,3 +7,4 @@ Projects
    :maxdepth: 2
 
    se1/index
+   emergency/index
