@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Amp Nerds: All About Impedance</title>
+        <style>
+          body {
+            background-color: black;
+            color: white;
+            margin: 2em;
+            font: 12pt Lucidatypewriter,monospace;
+          }
+          
+          h1,h2,h3,h4,h5,h6 {
+            font-face: Helvetica, sans-serif;
+          }
+          
+          h1 { font-size: 40pt; }
+          h2 { font-size: 30pt; }
+          h3 { font-size: 25pt; }
+          h4 { font-size: 20pt; }
+          
+          a:link { text-decoration: none; color: lightblue; }
+          a:visited { text-decoration: none; color: lightblue; }
+          a:active { text-decoration: none; color: white; }
+          a:hover { text-decoration: none; color: white; }
+
+          .container {
+            width: 780px;
+            margin: auto;
+          }
+          
+          .slide {
+            padding: 1em;
+            background-color: #101010;
+            border: solid 1px darkgray;
+          }
+          
+          pre {
+            padding: 1em;
+            background-color: #191919;
+            border: solid 1px darkgray;
+          }
+          
+          li {
+            margin: 0.5em 1em 0.5em 1em;
+          }
+          
+          #nav {
+            position: absolute;
+            top: 5px;
+            text-align: center;
+            width: 100%;
+          }
+          
+          #nav span {
+              margin: 0 5em 0 5em;
+          }
+
+          .math {
+              text-align: center;
+          }
+
+          .schematic {
+              text-align: center;
+          }
+        </style>
+
+        <script type="text/javascript" src="jquery.min.js"></script>
+
+        <script type="text/javascript">
+            var slides = null;
+            var index = -1;
+            var frames = null;
+            var findex = -1;
+          
+            function forward(speed) {
+                if ( frames && findex < frames.length ) {
+                    $(frames.get(findex)).show(speed);
+                    findex++;
+                }
+                else {
+                    forward_slide(speed);
+                  }
+            }
+            
+            function forward_slide(speed) {
+                if ( index >= 0 && index < slides.length ) {
+                    $(slides.get(index)).hide(speed);                    
+                }
+                if ( index < slides.length ) {
+                    index++;
+                }
+                if ( index < slides.length ) {
+                    slide = slides.get(index);
+                    $(slide).show(speed);
+                    frames = $(slide).find(".frame");
+                    findex = 0;
+                }
+                else {
+                    frames = null;
+                }
+            }
+            
+            function backward(speed) {
+                if ( frames && findex > 0 ) {
+                    findex--;
+                    $(frames.get(findex)).hide(speed);
+                }
+                else {
+                    backward_slide(speed);
+                }
+            }
+            
+            function backward_slide(speed) {
+                if ( index < slides.length && index >= 0 ) {
+                    $(slides.get(index)).hide(speed);
+                }
+                if ( index > 0 ) {
+                    index--;
+                    slide = slides.get(index);
+                    $(slide).show(speed);
+                    frames = $(slide).find(".frame");
+                    findex = frames.length;
+                }
+                else {
+                    frames = null;
+                }
+            }
+            
+            function handle_key(e) {
+                if (e.which == 108) { // L key
+                    forward(0);                    
+                }
+                if (e.which == 104) { // H key
+                    backward(0);                    
+                }
+                if (e.which == 32) { // space bar
+                    forward(500);
+                }
+            }
+            
+            var nav_timer = null;
+
+            function show_nav() {
+                $("#nav").fadeIn(100);
+            }
+            
+            function hide_nav() {
+                $("#nav").fadeOut(1000);
+                nav_timer = null;                
+            }
+
+            function handle_mouse_move(e) {
+                if ( nav_timer == null ) {
+                    show_nav();
+                }
+                else {
+                    clearTimeout(nav_timer);
+                }
+                nav_timer = setTimeout("hide_nav()", 5000);
+            }
+            
+            function wire_nav() {
+                $("#nav #prev a").click(function(e){
+                    //e.preventDefault();
+                    e.stopPropagation();
+                    backward(0);
+                });
+                $("#nav #next a").click(function(e){
+                    //e.preventDefault();
+                    e.stopPropagation();
+                    forward(0);
+                });
+                hide_nav();
+            }
+            
+            $(document).ready(function(){
+                $(".slide").css("display", "none");
+                $(".frame").css("display", "none");
+                slides = $(".slide");
+                $(document).click(function(){
+                    forward(500);
+                });
+                $(document).keypress(handle_key)
+                           .mousemove(handle_mouse_move);
+                wire_nav();
+                forward(0);
+            });
+            
+        </script>
+    </head>
+  <body>
+    <div id="nav">
+      <span id="prev"><a href="#">prev</a> (h)</span>
+      <span id="next"><a href="#">next</a> (l)</span>
+    </div>
+    <div class="container">
+
+      <div class="slide">
+        <h1>All About Impedance</h1>
+        <h2>Amp Nerds</h2>
+        <p>
+          Click mouse or press spacebar to advance slides.
+        </p>
+        <p>
+          &copy; 2013 Chris Rossi
+        </p>
+      </div>
+ 
+      <div class="slide">
+        <h1>What is Impedance?</h1>
+        <p class="frame">
+          Impedance is the abstraction of resistance to include the effects
+          of resistance, capacitance and inductance on AC signals.
+        </p>
+        <p class="frame">
+          Huh?
+        </p>
+        <p class="frame">
+          Ok, let's back up.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>What is Resistance?</h1>
+        <p class="frame">
+          Let's say you have an object and you apply a voltage across it from
+          one side to the other.  If the amount of current that flows through 
+          the object is linearly proportional to the amount voltage applied to
+          it, then that object is "ohmic" and is said to have resistance.
+        </p>
+        <p class="frame">
+          A good operational definition of resistance, then, is the ratio of
+          voltage to current in an object with an applied voltage:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>R</mi>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <mi>V</mi>
+                 <mi>I</mi>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R = V over I</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+            Represented schematically:
+        </p>
+        <p class="frame schematic">
+          <img src="resistor.svg" width="150px"/>
+        </p>
+        <p class="frame">
+          This relationship is called Ohm's law and is more commonly expressed
+          as:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>V</mi>
+                <mo stretchy="false">=</mo>
+                <mi>I</mi>
+               </mrow>
+               <mi>R</mi>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V = I R</annotation>
+             </semantics>
+            </math>
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Voltage Divider</h1>
+        <p class="frame">
+            We may as well go ahead and introduce the voltage divider.  This 
+            will come up a lot.
+        </p>
+        <p class="frame schematic">
+          <img src="divider.svg" width="200px"/>
+        </p>
+        <p class="frame">
+          Here we can see that the applied voltage is split across the two
+          resistors, R1 and R2.
+        </p>
+        <p class="frame">
+          Intuitively, we can see that if both resistors have the same 
+          resistance, then the voltage across each one must be equal, so Vout
+          must be half of Vin.
+        </p>
+        <p class="frame">
+          Just as intuitively, we can see that if R1 has zero resistance then
+          all of the voltage must appear across R2, so Vout is equal to Vin.
+          This is functionally identical to the situation on the previous 
+          slide.
+        </p>
+        <p class="frame">
+          Our intuition, then, is that the voltage at Vout, which is the 
+          portion of Vin that appears across V2, must be proportional to the 
+          portion of the total resistance represented by R2.  Expressed 
+          mathematically, we get the simple equation:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mrow>
+                 <mfrac>
+                  <msub>
+                   <mi>R</mi>
+                   <mn>2</mn>
+                  </msub>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">total</mi>
+                  </msub>
+                 </mfrac>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mn>2</mn>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mn>1</mn>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mn>2</mn>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_OUT = V_IN {R_2 over R_total} = V_IN {R_2 over {R_1 + R_2}}</annotation>
+             </semantics>
+            </math>
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Ok, why do we care about impedance?</h1>
+        <p class="frame">
+          Most of the time this comes up because you need to connect one circuit
+          to another circuit.  This is called coupling.
+        </p>
+        <p class="frame">
+          You might be connecting the output of one piece of equipment to the 
+          input of another, or you might be connecting one part of a circuit to
+          another part of a circuit.
+        </p>
+        <p class="frame">
+          Electrically, it's all the same.  The electrons don't care where one
+          box ends and another begins.
+        </p>
+        <p class="frame">
+          You've probably heard the terms "input impedance" and "output 
+          impedance".  If you don't know what they mean, it can get confusing.
+        </p>
+        <p class="frame">
+          The most useful to start to understand coupling and impedance is to
+          first simplify a little bit and narrow our discussion to just 
+          resistance.  Let's take a look at input resistance and output 
+          resistance and see if we can figure out what they mean for coupling.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Input Resistance</h1>
+        <p class="frame">
+          Input resistance is relatively simple to understand.  If you apply a
+          signal voltage to the input of some circuit, a certain amount of current
+          will flow.  
+        </p>
+        <p class="frame schematic">
+          <img src="inr.svg" width="300px"/>
+        </p>
+        <p class="frame">
+          We can treat the circuit on the right as a kind of black box.  We 
+          don't really need to know what's in it.  All we need to know is how
+          much current flows when we apply an input voltage.
+        </p>
+        <p class="frame">
+          The ratio of voltage to current is the input resistance of the 
+          circuit.  There doesn't have to really be a resistor, Rin, in the 
+          circuit.  But we can calculate an equivalent resistor from the amount
+          of current that flows in the circuit for a given voltage.  
+        </p>
+        <p class="frame">For 
+          purposes of coupling, we can model the entire circuit as just this
+          single resistor and only worry about that.  <span class="frame">To be
+          strictly correct, here, we should note that this really only holds if
+          the circuit being driven is a linear circuit.  What is and is not a 
+          linear circuit is beyond the scope of this presentation, but suffice
+          to say that even when non-linear components are present (tubes, 
+          transistors, etc...) we tend to work with linear approximations for
+          design purposes, so this assumption still works within the limits of
+          our linear (aka "small signal") approximation.</span>
+        </p>
+        <p class="frame">
+          The lower the input resistance, the more current will flow.  The 
+          current to drive the circuit must come from the preceeding circuit.
+          The more current required to drive a circuit, the larger a "load" it 
+          is to whatever is driving it.  This can get confusing, since a circuit
+          with a low input resistance is said to be a large load.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Output Resistance</h1>
+        <p class="frame">
+          The amount of current a circuit can actually provide to drive a 
+          particular load is determined by its output resistance.
+        </p>
+        <p class="frame">
+          For the author, output impedance was much harder to understand than
+          input impedance.  To really understand it, we need to turn to our 
+          friend Thévenin and his theorem.  
+        </p>
+        <p class="frame">
+            Basically, what Thévenin says is the behavior of any arbitrary linear 
+            circuit can be modelled precisely by a very simple equivalent
+            circuit which consists of a voltage source and a resistor:       
+        </p>
+        <p class="frame schematic">
+            <img src="mystery.svg" width="300px"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="thevenin.svg" width="250px"/>
+        </p>
+        <p class="frame">
+          Rth is known as the Thévenin equivalent resistor.  Why this
+          simplification works and how to calculate the Thévenin equivalent
+          circuit is beyond the scope of this presentation.  <span
+              class="frame">For linear circuits, however, any circuit can be
+              modelled in this way with no loss of behavior.  And of course,
+              since we typically use linear approximations for modelling
+              non-linear circuits, the equivalence holds within the limits of
+              the linear (aka "small signal") approximation.</span>
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Output Resistance</h1>
+        <p class="schematic">
+            <img src="mystery.svg" width="300px"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="thevenin.svg" width="250px"/>
+        </p>
+        <p class="frame">
+             You might be able to see now where our output resistance is.
+        </p>
+        <p class="frame">
+            Output resistance is nothing more than the Thévenin equivalent 
+            resistance of our circuit, as seen from the output port.
+        </p>
+        <p class="frame">
+          Imagine shorting the two nodes of the output port together.  The
+          full output voltage would appear across Rth, so the current would be
+          Vth / Rth.  This would be the maximum current this circuit could ever
+          drive to another circuit.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Coupling</h1>
+        <p class="frame">
+          Let's see what happens when our simplified output circuit drives our 
+          simplified input circuit:
+        </p>
+        <p class="frame schematic">
+            <img src="couple.svg" width="350px"/>
+        </p>
+        <p class="frame">
+          Do you see the voltage divider formed by the output and input 
+          resistances?
+        </p>
+        <p class="frame">
+          You can see that what we've labeled as Vin is the effective input 
+          voltage after the output voltage is divided by the input and output
+          impedances:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_IN = V_OUT {R_IN over {R_OUT + R_IN}}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          You can see from the formula above that the bigger Rin is with respect
+          to Rout, the closer Vin gets to Vout.  <span class="frame">In 
+              mathematical terms, we'd say the limit of Vin is Vout as Rin/Rout
+              approaches infinity.</span>
+        </p>
+        <p class="frame">
+          If we are trying to maximize the voltage transfer, then, we want to 
+          try to make Rin very large compared to Rout.  This type of coupling
+          is known as "bridging".
+        </p>
+        <p class="frame">
+          Although rare, it's possible that for some reason you're more 
+          concerned about maximizing current transferred, rather than voltage.
+          In that case, you want just the opposite: a large Rout compared to 
+          Rin.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Maximum Power Transfer</h1>
+        <p class="schematic">
+            <img src="couple.svg" width="350px"/>
+        </p>
+        <p class="math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_IN = V_OUT {R_IN over {R_OUT + R_IN}}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          Often, maximizing the voltage tranferred is exactly what we want, 
+          since we are concerned with the <i>information</i> represented by that
+          voltage.  For our purposes, this information is usually a sound wave.
+        </p>
+        <p class="frame">
+          What if, though, we want to maximize the energy transferred, rather 
+          than just the voltage?  <span class="frame">This is exactly what 
+              we're interested in when coupling an amplifier to a loud speaker!
+          </span>
+        </p>
+        <p class="frame">
+            Power, measured in watts, is a measure of energy per unit time.  So
+            if went want to know how much energy is being transferred continuously
+            per unit time, what we want to know is the power.
+        </p>
+        <p class="frame">
+            Power in an electrical circuit is easy to find.  It is merely the
+            product of voltage and current:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>P</mi>
+                <mo stretchy="false">=</mo>
+                <mi>V</mi>
+               </mrow>
+               <mi>I</mi>
+              </mrow>
+              <annotation encoding="StarMath 5.0">P = V I</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          We already know the voltage, Vin, and we know the current is just Vin
+          divided by Rin.  So the power transferred is:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>P</mi>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mi>I</mi>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>V</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mfrac>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <msubsup>
+                  <mi>V</mi>
+                  <mi mathvariant="italic">IN</mi>
+                  <mn>2</mn>
+                 </msubsup>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">P = V_IN I = V_IN V_IN over R_IN = V_IN^2 over R_IN</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+            Next we'll substitue for Vin and then take the maximum.  The math here
+            gets a little tedious, so I'll skip to the punch line and just tell
+            you, that if you work out the maximum, you wind up with:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R_IN = R_OUT</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+            We'll actually work this out in the next slide, but you can skip it
+            if you're not into tedious math.
+        </p>
+        <p class="frame">
+            So we see that for maximum power transfer we want our input and 
+            output resistances to be equal to each other.  We can see that 
+            although our voltage is halved by the voltage divider formed by
+            Rin and Rout, power transfer is at a maximum.
+        </p>
+        <p class="frame">
+            It seems that how we couple two circuits depends on what we're 
+            trying to do.  Are we trying to maximise <i>information</i> or
+            <i>energy</i>?
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Maximum Power Transfer</h1>
+        <p class="frame">
+            And now for the tedious math part.
+            <span class="frame">Given that:</span>
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>P</mi>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <msubsup>
+                  <mi>V</mi>
+                  <mi mathvariant="italic">IN</mi>
+                  <mn>2</mn>
+                 </msubsup>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mfrac>
+               </mrow>
+               <mi>,</mi>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">P = V_IN^2 over R_IN, V_IN = V_OUT {R_IN over {R_OUT + R_IN}}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame math">
+            Substitute, 
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mrow>
+                 <mi>P</mi>
+                 <mo stretchy="false">=</mo>
+                 <mfrac>
+                  <mrow>
+                   <msubsup>
+                    <mi>V</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                   <msubsup>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                  </mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                   <msup>
+                    <mrow>
+                     <mo stretchy="false">(</mo>
+                     <mrow>
+                      <mrow>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">OUT</mi>
+                       </msub>
+                       <mo stretchy="false">+</mo>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">IN</mi>
+                       </msub>
+                      </mrow>
+                     </mrow>
+                     <mo stretchy="false">)</mo>
+                    </mrow>
+                    <mn>2</mn>
+                   </msup>
+                  </mrow>
+                 </mfrac>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <mrow>
+                  <msubsup>
+                   <mi>V</mi>
+                   <mi mathvariant="italic">OUT</mi>
+                   <mn>2</mn>
+                  </msubsup>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mrow>
+                 <mrow>
+                  <msup>
+                   <mrow>
+                    <mo stretchy="false">(</mo>
+                    <mrow>
+                     <mrow>
+                      <msub>
+                       <mi>R</mi>
+                       <mi mathvariant="italic">OUT</mi>
+                      </msub>
+                      <mo stretchy="false">+</mo>
+                      <msub>
+                       <mi>R</mi>
+                       <mi mathvariant="italic">IN</mi>
+                      </msub>
+                     </mrow>
+                    </mrow>
+                    <mo stretchy="false">)</mo>
+                   </mrow>
+                   <mn>2</mn>
+                  </msup>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">P = {V_OUT^2 R_IN^2} over {R_IN (R_OUT + R_IN)^2} = {V_OUT^2 R_IN} over {(R_OUT + R_IN)^2}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame math">
+          Expand the denominator,
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mi>P</mi>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <mrow>
+                  <msubsup>
+                   <mi>V</mi>
+                   <mi mathvariant="italic">OUT</mi>
+                   <mn>2</mn>
+                  </msubsup>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mrow>
+                 <mrow>
+                  <mrow>
+                   <msubsup>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                   <mo stretchy="false">+</mo>
+                   <mn>2</mn>
+                  </mrow>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msubsup>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">P = {V_OUT^2 R_IN} over {R_OUT^2 + 2 R_IN R_OUT + R_IN^2}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          Now, the usual way to find the maximum of a function is to take the
+          first derivative and look for a zero crossing in the derivative
+          function, since we know that at a maximum or a minimum the slope of
+          our function is going to be zero.
+        </p>
+        <p class="frame">
+            In order to take a derivative we have to decide what our 
+            independent variable is.  In this case we could choose either Rin
+            or Rout, treating the other as a constant.  However, when I worked
+            this out using Rout as the independent variable, the result turned
+            out to be nonsense, so we'll use Rin as the independent variable.
+        </p>
+        <p class="frame">
+            The maximum will be at some point satisfying:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mfrac>
+                 <mi mathvariant="italic">dP</mi>
+                 <msub>
+                  <mi mathvariant="italic">dR</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mfrac>
+                <mo stretchy="false">=</mo>
+                <mn>0</mn>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">dP over dR_IN = 0</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          To take the derivative of P(Rin) we'll need to use the 
+          <a href="http://en.wikipedia.org/wiki/Quotient_rule">Quotient Rule</a>:
+        </p>
+        <p class="frame math">
+            For
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mi>f</mi>
+               <mrow>
+                <mrow>
+                 <mo stretchy="false">(</mo>
+                 <mrow>
+                  <mi>x</mi>
+                 </mrow>
+                 <mo stretchy="false">)</mo>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <mrow>
+                  <mi>g</mi>
+                  <mrow>
+                   <mo stretchy="false">(</mo>
+                   <mrow>
+                    <mi>x</mi>
+                   </mrow>
+                   <mo stretchy="false">)</mo>
+                  </mrow>
+                 </mrow>
+                 <mrow>
+                  <mi>h</mi>
+                  <mrow>
+                   <mo stretchy="false">(</mo>
+                   <mrow>
+                    <mi>x</mi>
+                   </mrow>
+                   <mo stretchy="false">)</mo>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+               <mi>,</mi>
+               <mi>f</mi>
+               <mi>&apos;</mi>
+               <mrow>
+                <mrow>
+                 <mo stretchy="false">(</mo>
+                 <mrow>
+                  <mi>x</mi>
+                 </mrow>
+                 <mo stretchy="false">)</mo>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mfrac>
+                 <mrow>
+                  <mi>g</mi>
+                  <mi>&apos;</mi>
+                  <mrow>
+                   <mo stretchy="false">(</mo>
+                   <mrow>
+                    <mi>x</mi>
+                   </mrow>
+                   <mo stretchy="false">)</mo>
+                  </mrow>
+                  <mi>h</mi>
+                  <mrow>
+                   <mrow>
+                    <mo stretchy="false">(</mo>
+                    <mrow>
+                     <mi>x</mi>
+                    </mrow>
+                    <mo stretchy="false">)</mo>
+                   </mrow>
+                   <mo stretchy="false">−</mo>
+                   <mi>g</mi>
+                  </mrow>
+                  <mrow>
+                   <mo stretchy="false">(</mo>
+                   <mrow>
+                    <mi>x</mi>
+                   </mrow>
+                   <mo stretchy="false">)</mo>
+                  </mrow>
+                  <mi>h</mi>
+                  <mi>&apos;</mi>
+                  <mrow>
+                   <mo stretchy="false">(</mo>
+                   <mrow>
+                    <mi>x</mi>
+                   </mrow>
+                   <mo stretchy="false">)</mo>
+                  </mrow>
+                 </mrow>
+                 <mrow>
+                  <msup>
+                   <mrow>
+                    <mo stretchy="false">[</mo>
+                    <mrow>
+                     <mi>h</mi>
+                     <mrow>
+                      <mo stretchy="false">(</mo>
+                      <mrow>
+                       <mi>x</mi>
+                      </mrow>
+                      <mo stretchy="false">)</mo>
+                     </mrow>
+                    </mrow>
+                    <mo stretchy="false">]</mo>
+                   </mrow>
+                   <mn>2</mn>
+                  </msup>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">f(x) = {g(x)} over {h(x)}, f&apos;(x) = {g&apos;(x) h(x) - g(x) h&apos;(x)} over {[h(x)]^2}</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+            In our case:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mi>g</mi>
+               <mrow>
+                <mrow>
+                 <mo stretchy="false">(</mo>
+                 <mrow>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mrow>
+                 <mo stretchy="false">)</mo>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <msubsup>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                 <mn>2</mn>
+                </msubsup>
+               </mrow>
+               <msub>
+                <mi>R</mi>
+                <mi mathvariant="italic">IN</mi>
+               </msub>
+               <mi>,</mi>
+               <mi>h</mi>
+               <mrow>
+                <mrow>
+                 <mo stretchy="false">(</mo>
+                 <mrow>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mrow>
+                 <mo stretchy="false">)</mo>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <msup>
+                 <mrow>
+                  <mo stretchy="false">(</mo>
+                  <mrow>
+                   <mrow>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">OUT</mi>
+                    </msub>
+                    <mo stretchy="false">+</mo>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">IN</mi>
+                    </msub>
+                   </mrow>
+                  </mrow>
+                  <mo stretchy="false">)</mo>
+                 </mrow>
+                 <mn>2</mn>
+                </msup>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">g(R_IN) = V_OUT^2 R_IN, h(R_IN) = (R_OUT + R_IN)^2 </annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame math">
+          So
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mrow>
+                 <mfrac>
+                  <mi mathvariant="italic">dP</mi>
+                  <msub>
+                   <mi mathvariant="italic">dR</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mfrac>
+                 <mo stretchy="false">=</mo>
+                 <mfrac>
+                  <mrow>
+                   <msubsup>
+                    <mi>V</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                   <mrow>
+                    <msup>
+                     <mrow>
+                      <mo stretchy="false">(</mo>
+                      <mrow>
+                       <mrow>
+                        <msub>
+                         <mi>R</mi>
+                         <mi mathvariant="italic">OUT</mi>
+                        </msub>
+                        <mo stretchy="false">+</mo>
+                        <msub>
+                         <mi>R</mi>
+                         <mi mathvariant="italic">IN</mi>
+                        </msub>
+                       </mrow>
+                      </mrow>
+                      <mo stretchy="false">)</mo>
+                     </mrow>
+                     <mn>2</mn>
+                    </msup>
+                    <mo stretchy="false">−</mo>
+                    <msubsup>
+                     <mi>V</mi>
+                     <mi mathvariant="italic">OUT</mi>
+                     <mn>2</mn>
+                    </msubsup>
+                   </mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                   <mrow>
+                    <mo stretchy="false">(</mo>
+                    <mrow>
+                     <mn>2</mn>
+                     <mrow>
+                      <msub>
+                       <mi>R</mi>
+                       <mi mathvariant="italic">OUT</mi>
+                      </msub>
+                      <mo stretchy="false">+</mo>
+                      <mn>2</mn>
+                     </mrow>
+                     <msub>
+                      <mi>R</mi>
+                      <mi mathvariant="italic">IN</mi>
+                     </msub>
+                    </mrow>
+                    <mo stretchy="false">)</mo>
+                   </mrow>
+                  </mrow>
+                  <mrow>
+                   <msup>
+                    <mrow>
+                     <mo stretchy="false">(</mo>
+                     <mrow>
+                      <mrow>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">OUT</mi>
+                       </msub>
+                       <mo stretchy="false">+</mo>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">IN</mi>
+                       </msub>
+                      </mrow>
+                     </mrow>
+                     <mo stretchy="false">)</mo>
+                    </mrow>
+                    <mn>4</mn>
+                   </msup>
+                  </mrow>
+                 </mfrac>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mn>0</mn>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">dP over dR_IN = {V_OUT^2 (R_OUT + R_IN)^2 - V_OUT^2 R_IN (2 R_OUT + 2 R_IN)} over {(R_OUT + R_IN)^4} = 0</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          Cancel denominator, move negative term to right side: 
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" class="math">
+             <semantics>
+              <mrow>
+               <msubsup>
+                <mi>V</mi>
+                <mi mathvariant="italic">OUT</mi>
+                <mn>2</mn>
+               </msubsup>
+               <mrow>
+                <msup>
+                 <mrow>
+                  <mo stretchy="false">(</mo>
+                  <mrow>
+                   <mrow>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">OUT</mi>
+                    </msub>
+                    <mo stretchy="false">+</mo>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">IN</mi>
+                    </msub>
+                   </mrow>
+                  </mrow>
+                  <mo stretchy="false">)</mo>
+                 </mrow>
+                 <mn>2</mn>
+                </msup>
+                <mo stretchy="false">=</mo>
+                <msubsup>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                 <mn>2</mn>
+                </msubsup>
+               </mrow>
+               <msub>
+                <mi>R</mi>
+                <mi mathvariant="italic">IN</mi>
+               </msub>
+               <mrow>
+                <mo stretchy="false">(</mo>
+                <mrow>
+                 <mn>2</mn>
+                 <mrow>
+                  <msub>
+                   <mi>R</mi>
+                   <mi mathvariant="italic">OUT</mi>
+                  </msub>
+                  <mo stretchy="false">+</mo>
+                  <mn>2</mn>
+                 </mrow>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mrow>
+                <mo stretchy="false">)</mo>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_OUT^2 (R_OUT + R_IN)^2 = V_OUT^2 R_IN (2 R_OUT + 2 R_IN)</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          Cancel Vout and expand:
+        </p>
+        <p class="math frame">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msubsup>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                 <mn>2</mn>
+                </msubsup>
+                <mo stretchy="false">+</mo>
+                <mn>2</mn>
+               </mrow>
+               <msub>
+                <mi>R</mi>
+                <mi mathvariant="italic">OUT</mi>
+               </msub>
+               <mrow>
+                <mrow>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mo stretchy="false">+</mo>
+                 <msubsup>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                  <mn>2</mn>
+                 </msubsup>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mn>2</mn>
+               </mrow>
+               <msub>
+                <mi>R</mi>
+                <mi mathvariant="italic">IN</mi>
+               </msub>
+               <mrow>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+                <mo stretchy="false">+</mo>
+                <mn>2</mn>
+               </mrow>
+               <msubsup>
+                <mi>R</mi>
+                <mi mathvariant="italic">IN</mi>
+                <mn>2</mn>
+               </msubsup>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R_OUT^2 + 2 R_OUT R_IN + R_IN^2 = 2 R_IN R_OUT + 2 R_IN^2</annotation>
+             </semantics>
+            </math>
+        </p>
+        <p class="frame">
+          Cancel some more:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msubsup>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                 <mn>2</mn>
+                </msubsup>
+                <mo stretchy="false">=</mo>
+                <msubsup>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">IN</mi>
+                 <mn>2</mn>
+                </msubsup>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R_OUT^2 = R_IN^2</annotation>
+             </semantics>
+           </math>
+        </p>
+        <p class="frame">
+          And finally:
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R_OUT = R_IN</annotation>
+             </semantics>
+            </math>
+        </p>
+      </div>
+
+    </div><!-- container -->
+    <script type="text/javascript"
+      src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+  </body>
+</html>
