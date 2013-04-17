@@ -59,6 +59,7 @@
 
           .math {
               text-align: center;
+              font-size: 150%;
           }
 
           .schematic {
@@ -200,6 +201,7 @@
       <div class="slide">
         <h1>All About Impedance</h1>
         <h2>Amp Nerds</h2>
+        <h3>Part One</h3
         <p>
           Click mouse or press spacebar to advance slides.
         </p>
@@ -302,6 +304,13 @@
           This is functionally identical to the situation on the previous 
           slide.
         </p>
+      </div>
+
+      <div class="slide">
+        <h1>Voltage Divider</h1>
+        <p class="schematic">
+          <img src="divider.svg" width="200px"/>
+        </p>
         <p class="frame">
           Our intuition, then, is that the voltage at Vout, which is the 
           portion of Vin that appears across V2, must be proportional to the 
@@ -390,10 +399,12 @@
           impedance".  If you don't know what they mean, it can get confusing.
         </p>
         <p class="frame">
-          The most useful to start to understand coupling and impedance is to
-          first simplify a little bit and narrow our discussion to just 
-          resistance.  Let's take a look at input resistance and output 
-          resistance and see if we can figure out what they mean for coupling.
+          Understanding of input and output impedance is essential to 
+          understanding coupling.
+        </p>
+        <p class="frame"> 
+          To get started, we can simplify and narrow our discussion to input
+          and output resistance.
         </p>
       </div>
 
@@ -418,22 +429,24 @@
           circuit.  But we can calculate an equivalent resistor from the amount
           of current that flows in the circuit for a given voltage.  
         </p>
-        <p class="frame">For 
-          purposes of coupling, we can model the entire circuit as just this
-          single resistor and only worry about that.  <span class="frame">To be
-          strictly correct, here, we should note that this really only holds if
-          the circuit being driven is a linear circuit.  What is and is not a 
-          linear circuit is beyond the scope of this presentation, but suffice
-          to say that even when non-linear components are present (tubes, 
-          transistors, etc...) we tend to work with linear approximations for
-          design purposes, so this assumption still works within the limits of
-          our linear (aka "small signal") approximation.</span>
+      </div>
+
+      <div class="slide">
+        <h1>Input Resistance</h1>
+        <p class="schematic">
+          <img src="inr.svg" width="300px"/>
         </p>
         <p class="frame">
-          The lower the input resistance, the more current will flow.  The 
-          current to drive the circuit must come from the preceeding circuit.
+            The lower the input resistance, the more current will flow when we
+            drive it.</p>  
+        <p class="frame">The 
+            current to drive the circuit must come from the preceeding circuit.
+        </p>
+        <p class="frame">
           The more current required to drive a circuit, the larger a "load" it 
-          is to whatever is driving it.  This can get confusing, since a circuit
+          is to whatever is driving it.
+        </p>
+        <p class="frame">  This can get confusing, since a circuit
           with a low input resistance is said to be a large load.
         </p>
       </div>
@@ -450,23 +463,17 @@
           friend Thévenin and his theorem.  
         </p>
         <p class="frame">
-            Basically, what Thévenin says is the behavior of any arbitrary linear 
-            circuit can be modelled precisely by a very simple equivalent
-            circuit which consists of a voltage source and a resistor:       
+        What Thévenin says is that if you have an arbitrary linear circuit,
+        and you choose two nodes in that circuit as your output port, the entire
+        behavior of the circuit at that output port can be characterized by a
+        a single voltage source and a single resistor:
         </p>
         <p class="frame schematic">
             <img src="mystery.svg" width="300px"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <img src="thevenin.svg" width="250px"/>
         </p>
         <p class="frame">
-          Rth is known as the Thévenin equivalent resistor.  Why this
-          simplification works and how to calculate the Thévenin equivalent
-          circuit is beyond the scope of this presentation.  <span
-              class="frame">For linear circuits, however, any circuit can be
-              modelled in this way with no loss of behavior.  And of course,
-              since we typically use linear approximations for modelling
-              non-linear circuits, the equivalence holds within the limits of
-              the linear (aka "small signal") approximation.</span>
+          This is a very useful simplification!
         </p>
       </div>
 
@@ -475,6 +482,14 @@
         <p class="schematic">
             <img src="mystery.svg" width="300px"/>&nbsp;&nbsp;&nbsp;&nbsp;
             <img src="thevenin.svg" width="250px"/>
+        </p>
+        <p class="frame">
+          We don't have to know what is in that circuit.  As long as we can 
+          characterize its behavior at the output port we can replace it with
+          its Thévenin equivalent.
+        </p>
+        <p class="frame">
+            Rth is known as the Thévenin equivalent resistor. 
         </p>
         <p class="frame">
              You might be able to see now where our output resistance is.
@@ -488,6 +503,37 @@
           full output voltage would appear across Rth, so the current would be
           Vth / Rth.  This would be the maximum current this circuit could ever
           drive to another circuit.
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Output Resistance</h1>
+        <p class="schematic">
+            <img src="mystery.svg" width="300px"/>&nbsp;&nbsp;&nbsp;&nbsp;
+            <img src="thevenin.svg" width="250px"/>
+        </p>
+        <p class="frame">
+            One last pedantic point.
+        </p>
+        <p class="frame">
+            Thévenin's theorem, and therefore his equivalent circuit, really
+            only apply to circuits composed entirely of <i>linear</i> components.
+        </p>
+        <p class="frame">
+            Strictly speaking, this is also true for the equivalent resistor we
+            found for modeling input resistance.  
+        </p>
+        <p class="frame">
+            Active components like transistors and vacuum tubes tend to have 
+            current to voltage relationships that are <i>non-linear</i>.
+        </p>
+        <p class="frame">
+            When analyzing amplifier circuits, though, we tend to use a linear
+            approximation, known as the "small signal" approximation.
+        </p>
+        <p class="frame">
+            Our equivalent circuits, then, are valid within the limits of our
+            linear, or "small signal" approximation.
         </p>
       </div>
 
@@ -550,13 +596,151 @@
              </semantics>
             </math>
         </p>
+      </div>
+
+      <div class="slide">
+        <h1>Bridging</h1>
+        <p class="schematic">
+            <img src="couple.svg" width="350px"/>
+        </p>
+        <p class="math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_IN = V_OUT {R_IN over {R_OUT + R_IN}}</annotation>
+             </semantics>
+            </math>
+        </p> 
         <p class="frame">
           You can see from the formula above that the bigger Rin is with respect
-          to Rout, the closer Vin gets to Vout.  <span class="frame">In 
-              mathematical terms, we'd say the limit of Vin is Vout as Rin/Rout
-              approaches infinity.</span>
+          to Rout, the closer Vin gets to Vout.
         </p>
         <p class="frame">
+          In mathematical terms, we'd say the limit of Vin is Vout as Rin/Rout
+          approaches infinity.
+        </p>
+        <p class="frame math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mrow>
+                 <munder>
+                  <mi>lim</mi>
+                  <mrow>
+                   <mrow>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">IN</mi>
+                    </msub>
+                    <mo stretchy="false">/</mo>
+                    <msub>
+                     <mi>R</mi>
+                     <mi mathvariant="italic">OUT</mi>
+                    </msub>
+                   </mrow>
+                   <mo stretchy="false">→</mo>
+                   <mo stretchy="false">∞</mo>
+                  </mrow>
+                 </munder>
+                 <msub>
+                  <mi>V</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">lim from R_IN / R_OUT toward infinity  V_IN = V_OUT</annotation>
+             </semantics>
+            </math>
+        </p>
+      </div>
+
+      <div class="slide">
+        <h1>Bridging</h1>
+        <p class="schematic">
+            <img src="couple.svg" width="350px"/>
+        </p>
+        <p class="math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>V</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+               <mrow>
+                <mfrac>
+                 <msub>
+                  <mi>R</mi>
+                  <mi mathvariant="italic">IN</mi>
+                 </msub>
+                 <mrow>
+                  <mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                   </msub>
+                   <mo stretchy="false">+</mo>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                  </mrow>
+                 </mrow>
+                </mfrac>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">V_IN = V_OUT {R_IN over {R_OUT + R_IN}}</annotation>
+             </semantics>
+            </math>
+        </p> 
+       <p class="frame">
           If we are trying to maximize the voltage transfer, then, we want to 
           try to make Rin very large compared to Rout.  This type of coupling
           is known as "bridging".
@@ -569,11 +753,9 @@
         </p>
       </div>
 
+
       <div class="slide">
-        <h1>Maximum Power Transfer</h1>
-        <p class="schematic">
-            <img src="couple.svg" width="350px"/>
-        </p>
+        <h1>Maximum Power</h1>
         <p class="math">
             <math xmlns="http://www.w3.org/1998/Math/MathML">
              <semantics>
@@ -622,15 +804,20 @@
         </p>
         <p class="frame">
           What if, though, we want to maximize the energy transferred, rather 
-          than just the voltage?  <span class="frame">This is exactly what 
+          than just the voltage?
+        </p>
+        <p class="frame">This is exactly what 
               we're interested in when coupling an amplifier to a loud speaker!
-          </span>
         </p>
         <p class="frame">
             Power, measured in watts, is a measure of energy per unit time.  So
             if went want to know how much energy is being transferred continuously
             per unit time, what we want to know is the power.
         </p>
+      </div>
+
+      <div class="slide">
+        <h1>Maximum Power</h1>
         <p class="frame">
             Power in an electrical circuit is easy to find.  It is merely the
             product of voltage and current:
@@ -704,9 +891,9 @@
             </math>
         </p>
         <p class="frame">
-            Next we'll substitue for Vin and then take the maximum.  The math here
-            gets a little tedious, so I'll skip to the punch line and just tell
-            you, that if you work out the maximum, you wind up with:
+          If we substitue for Vin we can take the maximum.  The math here gets
+          a little tedious, so I'll skip to the punch line and just tell you,
+          that if you work out the maximum, you wind up with:
         </p>
         <p class="frame math">
             <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -728,29 +915,61 @@
              </semantics>
             </math>
         </p>
-        <p class="frame">
-            We'll actually work this out in the next slide, but you can skip it
-            if you're not into tedious math.
-        </p>
-        <p class="frame">
-            So we see that for maximum power transfer we want our input and 
-            output resistances to be equal to each other.  We can see that 
-            although our voltage is halved by the voltage divider formed by
-            Rin and Rout, power transfer is at a maximum.
-        </p>
-        <p class="frame">
-            It seems that how we couple two circuits depends on what we're 
-            trying to do.  Are we trying to maximise <i>information</i> or
-            <i>energy</i>?
-        </p>
       </div>
 
       <div class="slide">
-        <h1>Maximum Power Transfer</h1>
-        <p class="frame">
-            And now for the tedious math part.
-            <span class="frame">Given that:</span>
+        <h1>Maximum Power</h1>
+        <p class="math">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">IN</mi>
+                </msub>
+                <mo stretchy="false">=</mo>
+                <msub>
+                 <mi>R</mi>
+                 <mi mathvariant="italic">OUT</mi>
+                </msub>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">R_IN = R_OUT</annotation>
+             </semantics>
+            </math>
         </p>
+        <p class="frame">
+           This is an interesting result!
+        </p>
+        <p class="frame">
+           If we want to maximize power transfer, then we want our input and
+           output resistances to match.
+        </p> 
+        <p class="frame">
+           Since Rin and Rout form a voltage divider, if they are both equal,
+           the voltage transfer will be halved.
+        </p>
+        <p class="frame">
+           The power transferred, however, is at its maximum.
+        </p>
+        <p class="frame">
+           Clearly the type of coupling we use depends on what we intend to 
+           accomplish in a particular circuit.
+        </p>
+        <p class="frame">
+           Are we concerned more with the information contained in a signal,
+           or with its energy?
+         </p>
+      </div>
+
+      <div class="slide">
+        <h1>Maximum Power</h1>
+        <p class="frame">
+        And now for the tedious math part.  You can skip the next few 
+        slides if you like.
+        </p>
+        <p class="frame">Given that:</p>
         <p class="frame math">
             <math xmlns="http://www.w3.org/1998/Math/MathML">
              <semantics>
@@ -967,6 +1186,10 @@
             this out using Rout as the independent variable, the result turned
             out to be nonsense, so we'll use Rin as the independent variable.
         </p>
+      </div>
+
+      <div class="slide">
+        <h1>Maximum Power</h1>
         <p class="frame">
             The maximum will be at some point satisfying:
         </p>
@@ -1286,6 +1509,115 @@
              </semantics>
             </math>
         </p>
+      </div>
+      <div class="slide">
+        <h1>Maximum Power</h1>
+        <p class="math">
+          So
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+             <semantics>
+              <mrow>
+               <mrow>
+                <mrow>
+                 <mfrac>
+                  <mi mathvariant="italic">dP</mi>
+                  <msub>
+                   <mi mathvariant="italic">dR</mi>
+                   <mi mathvariant="italic">IN</mi>
+                  </msub>
+                 </mfrac>
+                 <mo stretchy="false">=</mo>
+                 <mfrac>
+                  <mrow>
+                   <msubsup>
+                    <mi>V</mi>
+                    <mi mathvariant="italic">OUT</mi>
+                    <mn>2</mn>
+                   </msubsup>
+                   <mrow>
+                    <msup>
+                     <mrow>
+                      <mo stretchy="false">(</mo>
+                      <mrow>
+                       <mrow>
+                        <msub>
+                         <mi>R</mi>
+                         <mi mathvariant="italic">OUT</mi>
+                        </msub>
+                        <mo stretchy="false">+</mo>
+                        <msub>
+                         <mi>R</mi>
+                         <mi mathvariant="italic">IN</mi>
+                        </msub>
+                       </mrow>
+                      </mrow>
+                      <mo stretchy="false">)</mo>
+                     </mrow>
+                     <mn>2</mn>
+                    </msup>
+                    <mo stretchy="false">−</mo>
+                    <msubsup>
+                     <mi>V</mi>
+                     <mi mathvariant="italic">OUT</mi>
+                     <mn>2</mn>
+                    </msubsup>
+                   </mrow>
+                   <msub>
+                    <mi>R</mi>
+                    <mi mathvariant="italic">IN</mi>
+                   </msub>
+                   <mrow>
+                    <mo stretchy="false">(</mo>
+                    <mrow>
+                     <mn>2</mn>
+                     <mrow>
+                      <msub>
+                       <mi>R</mi>
+                       <mi mathvariant="italic">OUT</mi>
+                      </msub>
+                      <mo stretchy="false">+</mo>
+                      <mn>2</mn>
+                     </mrow>
+                     <msub>
+                      <mi>R</mi>
+                      <mi mathvariant="italic">IN</mi>
+                     </msub>
+                    </mrow>
+                    <mo stretchy="false">)</mo>
+                   </mrow>
+                  </mrow>
+                  <mrow>
+                   <msup>
+                    <mrow>
+                     <mo stretchy="false">(</mo>
+                     <mrow>
+                      <mrow>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">OUT</mi>
+                       </msub>
+                       <mo stretchy="false">+</mo>
+                       <msub>
+                        <mi>R</mi>
+                        <mi mathvariant="italic">IN</mi>
+                       </msub>
+                      </mrow>
+                     </mrow>
+                     <mo stretchy="false">)</mo>
+                    </mrow>
+                    <mn>4</mn>
+                   </msup>
+                  </mrow>
+                 </mfrac>
+                </mrow>
+                <mo stretchy="false">=</mo>
+                <mn>0</mn>
+               </mrow>
+              </mrow>
+              <annotation encoding="StarMath 5.0">dP over dR_IN = {V_OUT^2 (R_OUT + R_IN)^2 - V_OUT^2 R_IN (2 R_OUT + 2 R_IN)} over {(R_OUT + R_IN)^4} = 0</annotation>
+             </semantics>
+            </math>
+        </p>
         <p class="frame">
           Cancel denominator, move negative term to right side: 
         </p>
@@ -1462,9 +1794,32 @@
         </p>
       </div>
 
+      <div class="slide">
+          <h1>Ok, so what is impedance?</h1>
+          <p class="frame">
+            We'll get to that next time!
+          </p>
+          <p class="frame">
+            In part two we'll show you can extend the concepts we've covered 
+            here for resistance to include capacitance and inductance when
+            looking at AC signals.  
+          </p>
+          <p class="frame">
+            The fun part is that for capacitors and inductors, impedance depends
+            on frequency, so we'll get to look at frequency response and phase
+            shift.
+          </p>
+          <p class="frame">
+            I hope you like imaginary numbers and complex arithmetic!
+          </p>
+          <p class="frame">
+            Until then, rock on!
+          </p>
+      </div>
+
     </div><!-- container -->
-    <script type="text/javascript"
+    <!--script type="text/javascript"
       src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
+    </script-->
   </body>
 </html>
